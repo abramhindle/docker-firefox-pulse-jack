@@ -15,8 +15,12 @@ RUN export uid=1000 gid=1000 && \
 
 USER developer
 ENV HOME /home/developer
-CMD ["sh","-c","pulseaudio --daemon && \
-    pactl load-module module-jack-sink   client_name=dockerfirefoxout channels=2 && \    
-    pactl load-module module-jack-source client_name=dockerfirefoxin  channels=2 && \    
-    /usr/bin/firefox"]
+ADD pa.sh /home/developer/
+ADD ff.sh /home/developer/
+ENTRYPOINT ["bash","/home/developer/ff.sh"]
+# # While I would've preferred to keep these in the docker file I want to specify the FF args on the commandline
+# ENTRYPOINT ["sh","-c","pulseaudio --daemon && \
+#    pactl load-module module-jack-sink   client_name=dockerfirefoxout channels=2 && \    
+#    pactl load-module module-jack-source client_name=dockerfirefoxin  channels=2"]
+# CMD /usr/bin/firefox
 # CMD /usr/bin/firefox
